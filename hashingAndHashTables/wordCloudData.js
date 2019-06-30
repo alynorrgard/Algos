@@ -9,21 +9,31 @@
 
 function stringToWordCloudData(theString) {
   let wordCounts = {};
+  let currentStartIdx = 0;
   let currentWord = '';
   const punctuation = [',', '.', '?', '!', '-', ' '];
 
   for (let i = 0; i < theString.length; i++) {
     const currentChar = theString[i].toLowerCase();
+    let currentEndIdx = i;
 
     if (punctuation.includes(currentChar)) {
-      if (wordCounts[currentWord]) {
-        wordCounts[currentWord]++;
-      } else {
-        wordCounts[currentWord] = 1;
-      }
+      currentWord = theString.slice(currentStartIdx, currentEndIdx);
+    } else if (currentEndIdx === theString.length - 1) {
+      currentWord = theString.slice(currentStartIdx);
     } else {
-      currentWord += currentChar;
+      continue;
     }
+
+    currentWord = currentWord.toLowerCase();
+
+    if (wordCounts[currentWord]) {
+      wordCounts[currentWord]++;
+    } else {
+      wordCounts[currentWord] = 1;
+    }
+
+    currentStartIdx = currentEndIdx + 1;
   }
   return wordCounts;
 }
